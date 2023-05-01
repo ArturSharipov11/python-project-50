@@ -18,4 +18,3 @@ def generate_diff(file_path1, file_path2):
             diff_lines.append(f'  {key}: {json.dumps(dict1[key])}')
     return '{\n' + '\n'.join(diff_lines) + '\n}'
 
-~
