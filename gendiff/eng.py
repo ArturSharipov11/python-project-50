@@ -1,27 +1,14 @@
-import json
-from os.path import normpath
-
-
-def run_gendiff(file_path1, file_path2):
-    file_path1 = normpath(file_path1)
-    file_path2 = normpath(file_path2)
-    file1 = json.load(open(file_path1))
-    file2 = json.load(open(file_path2))
-    print(generate_diff(file1, file2))
-
-
 def generate_diff(data1, data2):
-    diff = {}
-    for key in data1.keys():
-        item1 = data1[key]
-        if key not in data2.keys():
-            diff[f'- {key}'] = item1
-        elif item1 == data2[key]:
-            diff[f'  {key}'] = data2.pop(key)
+    result = ''
+    for key, value in data1.items():
+        if key in data2:
+            if value == data2[key]:
+                result += f'  {key}: {value}\n'
+            else:
+                result += f'- {key}: {value}\n+ {key}: {data2[key]}\n'
         else:
-            diff[f'- {key}'] = item1
-    if data2:
-        diff.update({f'+ {key}': item for key, item in data2.items()})
-    sorted_diff = dict(sorted(diff.items(), key=lambda x: x[0][2:]))
-    return (str(json.dumps(sorted_diff, indent=2,
-                           separators=('', ': ')))).replace('"', '')
+            result += f'- {key}: {value}\n'
+    for key, value in data2.items():
+        if key not in data1:
+            result += f'+ {key}: {value}\n'
+    return result[:-1]
