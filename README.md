@@ -4,4 +4,4 @@
 <a href="https://codeclimate.com/github/ArturSharipov11/python-project-50/maintainability"><img src="https://api.codeclimate.com/v1/badges/58ed064c7d939f860240/maintainability" /></a>
 
 
-![<workflow-name>](https://github.com/rturSharipov11/python-project-50/actions/workflows/hexlet-check/badge.svg)
+![hexlet-check](https://github.com/rturSharipov11/python-project-50/actions/workflows/hexlet-check/badge.svg)
