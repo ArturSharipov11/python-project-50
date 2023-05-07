@@ -1,14 +1,14 @@
 def generate_diff(data1, data2):
-    result = ''
+    result = {}
     for key, value in data1.items():
         if key in data2:
             if value == data2[key]:
-                result += f'  {key}: {value}\n'
+                result[key] = [value, value]
             else:
-                result += f'- {key}: {value}\n+ {key}: {data2[key]}\n'
+                result[key] = [value, data2[key]]
         else:
-            result += f'- {key}: {value}\n'
+            result[key] = [value, None]
     for key, value in data2.items():
         if key not in data1:
-            result += f'+ {key}: {value}\n'
-    return result[:-1]
+            result[key] = [None, value]
+    return result
