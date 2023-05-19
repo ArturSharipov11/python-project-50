@@ -2,6 +2,7 @@
 from gendiff.main import gen_diff
 
 
+
 def main():
     gen_diff()
 

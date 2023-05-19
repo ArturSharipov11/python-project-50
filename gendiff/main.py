@@ -1,7 +1,7 @@
 from gendiff.cli import parse_args
 from gendiff.eng import generate_diff
 from gendiff.tools import get_file_content
-from gendiff.out_print import diff_str
+from gendiff.out_print import diff_str, over_pr
 import json
 
 
@@ -10,7 +10,7 @@ def gen_diff():
     dict1 = get_file_content(args.first_file)
     dict2 = get_file_content(args.second_file)
     diff = generate_diff(dict1, dict2)
-    return diff_str(diff)
+    print(over_pr(diff_str(diff)))
 
 
 def main():

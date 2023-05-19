@@ -4,6 +4,8 @@ def generate_diff(data1, data2):
         if key in data2:
             if value == data2[key]:
                 result[key] = [value, value]
+            elif isinstance(value, dict) and isinstance(data2[key], dict):
+                result[key] = [generate_diff(value, data2[key]), generate_diff(value, data2[key])]
             else:
                 result[key] = [value, data2[key]]
         else:
