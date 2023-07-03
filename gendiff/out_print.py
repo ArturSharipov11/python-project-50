@@ -1,49 +1,62 @@
 import json
+from collections import defaultdict
+from gendiff.tools import map_value, map_stylish
 
 
 def diff_str(diff):
-    result = {}
+    result = defaultdict(dict)
     for key, value in sorted(diff.items()):
-        if isinstance(value[0], dict) and isinstance(value[1], dict):
-            result[key] = diff_to_dict(value[0])
-        elif value[0] is None:
-            result_key = f'+ {key}'
-            result[result_key] = value[1]
-        elif value[1] is None:
-            result_key = f'- {key}'
-            result[result_key] = value[0]
-        elif value[0] == value[1]:
-            result_key = f'  {key}'
-            result[result_key] = value[0]
-        else:
-            result_key = f'- {key}'
-            result[result_key] = value[0]
-            result_key = f'+ {key}'
-            result[result_key] = value[1]
+        if value['type'] == 'changed':
+            result[f'- {key}'] = value['value']['old']
+            result[f'+ {key}'] = value['value']['new']
+        elif value['type'] == 'added':
+            result[f'+ {key}'] = value['value']
+        elif value['type'] == 'removed':
+            result[f'- {key}'] = value['value']
+        elif value['type'] == 'unchanged':
+            result[key] = value['value']
+        elif value['type'] == 'nested':
+            result[key] = diff_to_dict(value['value'])
     return result
 
 
-def over_pr(dict_to_print):
-    return json.dumps(dict_to_print, indent=4).replace('"', '').replace("'", '')
+def form_stylish(diff):
+    to_print = diff_str(diff)
+
+    def stylish(dict_to_stylish, tab='    ', lvl=1):
+        result = '{\n'
+        for key, value in dict_to_stylish.items():
+            if isinstance(value, dict):
+                if key.startswith('+') or key.startswith('-'):
+                    result += f"{tab * lvl}{map_stylish(key)}: {stylish(value, tab, lvl + 1)}"[2:] + '\n'
+                else:
+                    result += f"{tab * lvl}{key}: {stylish(value, tab, lvl + 1)}\n"
+            else:
+                if key.startswith('+') or key.startswith('-'):
+                    result += f"{tab * lvl}{map_stylish(key)}: {map_stylish(value)}"[2:] + '\n'
+                else:
+                    result += f'{tab * lvl}{key}: {map_stylish(value)}\n'
+        result += f'{tab * (lvl - 1)}}}'
+        return result
+
+    return stylish(to_print)
 
 
-def in_plane(diff):
-    result = []
+def form_plain(diff, path=''):
+    result = ''
     for key, value in sorted(diff.items()):
-        if isinstance(value[0], dict) and isinstance(value[1], dict):
-            result.append(diff_to_plain(value[0]))
-        elif value[0] is None:
-            if isinstance(value[1], dict):
-                result.append(f"Property '{key}' was added with value: [complex value]")
-            else:
-                result.append(f"Property '{key}' was added with value: {value[1]}")
-        elif value[1] is None:
-            result.append(f"Property '{key}' was removed")
-        elif value[0] == value[1]:
-            result.append(f'Property \'{key}\' was unchanged')
-        else:
-            if isinstance(value[0], dict):
-                result.append(f"Property '{key}' was updated. From [complex value] to {value[1]}")
-            else:
-                result.append(f"Property '{key}' was updated. From {value[0]} to {value[1]}")
-    return '\n'.join(result)
+        key = f'{path}.{key}' if path else key
+        if value['type'] == 'nested':
+            result += form_plain(value['value'], f'{key}')
+        elif value['type'] == 'changed':
+            result += f"Property '{key}' was updated. " \
+                      f"From {map_value(value['value']['old'])} to {map_value(value['value']['new'])}\n"
+        elif value['type'] == 'added':
+            result += f"Property '{key}' was added with value: {map_value(value['value'])}\n"
+        elif value['type'] == 'removed':
+            result += f"Property '{key}' was removed\n"
+    return result
+
+
+def form_json(diff):
+    return json.dumps(diff_str(diff), indent=5)
