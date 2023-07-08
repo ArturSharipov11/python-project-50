@@ -16,7 +16,7 @@ def diff_str(diff):
         elif value['type'] == 'unchanged':
             result[key] = value['value']
         elif value['type'] == 'nested':
-            result[key] = diff_to_dict(value['value'])
+            result[key] = diff_str(value['value'])
     return result
 
 

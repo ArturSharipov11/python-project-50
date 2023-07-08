@@ -3,7 +3,7 @@ def generate_diff(data1, data2):
     for key, value in data1.items():
         if key in data2:
             if isinstance(value, dict) and isinstance(data2[key], dict):
-                descendants = build_diff_tree(value, data2[key])
+                descendants = generate_diff(value, data2[key])
                 result[key] = {'type': 'nested', 'value': descendants}
             elif value == data2[key]:
                 result[key] = {'type': 'unchanged', 'value': value}
