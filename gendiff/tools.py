@@ -21,6 +21,7 @@ def get_file_content(file_name):
         data = _.read()
     return parse(data, file_extension)
 
+
 def map_value(value):
     if isinstance(value, dict):
         return '[complex value]'
