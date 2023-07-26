@@ -1,21 +1,21 @@
 import json
 from collections import defaultdict
 from gendiff.tools import map_value, map_stylish
-
+from gendiff.constan import CHANGED, OLD, NEW, ADDED, REMOVED, UNCHANGED, NESTED
 
 def diff_str(diff):
     result = defaultdict(dict)
     for key, value in sorted(diff.items()):
-        if value['type'] == 'changed':
-            result[f'- {key}'] = value['value']['old']
-            result[f'+ {key}'] = value['value']['new']
-        elif value['type'] == 'added':
+        if value['type'] == CHANGED:
+            result[f'- {key}'] = value['value'][OLD]
+            result[f'+ {key}'] = value['value'][NEW]
+        elif value['type'] == ADDED:
             result[f'+ {key}'] = value['value']
-        elif value['type'] == 'removed':
+        elif value['type'] == REMOVED:
             result[f'- {key}'] = value['value']
-        elif value['type'] == 'unchanged':
+        elif value['type'] == UNCHANGED:
             result[key] = value['value']
-        elif value['type'] == 'nested':
+        elif value['type'] == NESTED:
             result[key] = diff_str(value['value'])
     return result
 
@@ -46,14 +46,14 @@ def form_plain(diff, path=''):
     result = ''
     for key, value in sorted(diff.items()):
         key = f'{path}.{key}' if path else key
-        if value['type'] == 'nested':
+        if value['type'] == NESTED:
             result += form_plain(value['value'], f'{key}')
-        elif value['type'] == 'changed':
+        elif value['type'] == CHANGED:
             result += f"Property '{key}' was updated. " \
-                      f"From {map_value(value['value']['old'])} to {map_value(value['value']['new'])}\n"
-        elif value['type'] == 'added':
+                      f"From {map_value(value['value'][OLD])} to {map_value(value['value'][NEW])}\n"
+        elif value['type'] == ADDED:
             result += f"Property '{key}' was added with value: {map_value(value['value'])}\n"
-        elif value['type'] == 'removed':
+        elif value['type'] == REMOVED:
             result += f"Property '{key}' was removed\n"
     return result
 

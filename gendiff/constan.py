@@ -1,0 +1,8 @@
+OLD = 'old'
+NEW = 'new'
+REMOVED = 'removed'
+ADDED = 'added'
+CHANGED = 'changed'
+UNCHANGED = 'unchanged'
+NESTED = 'nested'
+DELETED = 'deleted'
