@@ -1,65 +1,41 @@
-import itertools
-from gendiff.constan import ADDED, NESTED, CHANGED, DELETED
+import json
+from collections import defaultdict
+from gendiff.constants import ADDED, REMOVED, NESTED, UNCHANGED, OLD, NEW
+from gendiff.assistants.mapping import map_stylish
 
 
-def get_stylish(value, replacer=' ', spaces_count=4):  # noqa:C901
-    for key, val in value.items():
-        if isinstance(val, dict):
-            get_stylish(val)
-        elif isinstance(val, bool):
-            value[key] = str(val).lower()
-        elif val is None:
-            value[key] = 'null'
+def form_stylish(diff):
+    def convert_diff_tree_to_dict(diff):
+        result = defaultdict(dict)
 
-    def iter(current_value, depth):
-        if not isinstance(current_value, dict):
-            return str(current_value)
+        def handle_unchanged(key, value):
+            result[key] = value[UNCHANGED]
 
-        deep_indent_size = depth + spaces_count
-        deep_indent = replacer * (deep_indent_size - 2)
-        current_indent = replacer * depth
-        result_list = []
-        for key, val in current_value.items():
-            if isinstance(val, int):
-                result_list.append(
-                    f'{replacer * deep_indent_size}{key}: {val}'
-                )
-            elif 'status' in val:
-                if val['status'] == NESTED:
-                    result_list.append(
-                        f'{replacer * deep_indent_size}'
-                        f'{key}: {iter(val["value"], deep_indent_size)}'
-                    )
-                elif val['status'] == ADDED:
-                    result_list.append(
-                        f'{deep_indent}+ '
-                        f'{key}: {iter(val["value"], deep_indent_size)}'
-                    )
-                elif val['status'] == DELETED:
-                    result_list.append(
-                        f'{deep_indent}- '
-                        f'{key}: {iter(val["value"], deep_indent_size)}'
-                    )
-                elif val['status'] == CHANGED:
-                    result_list.append(
-                        f'{deep_indent}- '
-                        f'{key}: {iter(val["value_1"], deep_indent_size)}'
-                    )
-                    result_list.append(
-                        f'{deep_indent}+ '
-                        f'{key}: {iter(val["value_2"], deep_indent_size)}'
-                    )
-                else:
-                    result_list.append(
-                        f'{deep_indent}  '
-                        f'{key}: {iter(val["value"], deep_indent_size)}'
-                    )
-            else:
-                result_list.append(
-                    f'{replacer * deep_indent_size}'
-                    f'{key}: {iter(val, deep_indent_size)}'
-                )
-        result = itertools.chain("{", result_list, [current_indent + "}"])
-        return '\n'.join(result)
+        def handle_changed(key, value):
+            result[f'- {key}'] = value[OLD]
+            result[f'+ {key}'] = value[NEW]
 
-    return iter(value, 0)
+        def handle_added(key, value):
+            result[f'+ {key}'] = value[ADDED]
+
+        def handle_removed(key, value):
+            result[f'- {key}'] = value[REMOVED]
+
+        def handle_nested(key, value):
+            result[key] = convert_diff_tree_to_dict(value)
+
+        for key, value in sorted(diff.items()):
+            if NESTED in value:
+                handle_nested(key, value[NESTED])
+            elif OLD in value:
+                handle_changed(key, value)
+            elif UNCHANGED in value:
+                handle_unchanged(key, value)
+            elif ADDED in value:
+                handle_added(key, value)
+            elif REMOVED in value:
+                handle_removed(key, value)
+        return result
+
+    result = json.dumps(convert_diff_tree_to_dict(diff), indent=4)
+    return map_stylish(result)

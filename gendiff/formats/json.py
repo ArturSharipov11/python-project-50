@@ -1,5 +1,5 @@
 import json
 
 
-def get_json(value):
-    return json.dumps(value)
+def form_json(diff):
+    return json.dumps(diff, indent=4)

@@ -1,4 +1,4 @@
-from gendiff.constan import NESTED, UNCHANGED, CHANGED, OLD, NEW, REMOVED, ADDED
+from gendiff.constants import NESTED, UNCHANGED, CHANGED, OLD, NEW, REMOVED, ADDED
 
 def generate_diff(data1, data2):
     result = {}
