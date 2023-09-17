@@ -1,6 +1,6 @@
 from gendiff.constants import NESTED, UNCHANGED, CHANGED, OLD, NEW, REMOVED, ADDED
 
-def generate_diff(data1, data2):
+def gen_diff(data1, data2):
     result = {}
     for key, value in data1.items():
         if key in data2:

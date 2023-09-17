@@ -1,7 +1,7 @@
 import json
 from collections import defaultdict
 from gendiff.constants import ADDED, REMOVED, NESTED, UNCHANGED, OLD, NEW
-from gendiff.assistants.mapping import map_stylish
+from gendiff.formats.plain import map_stylish
 
 
 def form_stylish(diff):
