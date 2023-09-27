@@ -1,11 +1,12 @@
 from gendiff.constants import NESTED, UNCHANGED, CHANGED, OLD, NEW, REMOVED, ADDED
 
-def gen_diff(data1, data2):
+
+def get_gen_diff(data1, data2):
     result = {}
     for key, value in data1.items():
         if key in data2:
             if isinstance(value, dict) and isinstance(data2[key], dict):
-                descendants = generate_diff(value, data2[key])
+                descendants = get_gen_diff(value, data2[key])
                 result[key] = {'type': NESTED, 'value': descendants}
             elif value == data2[key]:
                 result[key] = {'type': UNCHANGED, 'value': value}
