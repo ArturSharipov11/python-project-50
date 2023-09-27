@@ -49,6 +49,7 @@ json_format_output = 'json'
 
     ]
 )
+
 def test_generate_diff(file1, file2, correct_outputs, format_output):
     with open(correct_outputs) as f:
         expected = f.read()
