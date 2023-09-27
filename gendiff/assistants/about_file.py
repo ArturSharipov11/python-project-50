@@ -11,7 +11,7 @@ def get_file_extension(filename):
 
 
 def load_file(filename):
-    with open(normalize_file_name(filename)) as file:
+    with open(norm_file_name(filename)) as file:
         return file.read()
 
 
