@@ -1,6 +1,6 @@
 from gendiff.main import generate_diff
 from itertools import cycle, repeat
-import pytest
+import pytest 
 
 first_version_files = (
     './tests/files/file1_tree.json',
