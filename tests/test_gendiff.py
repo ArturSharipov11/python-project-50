@@ -1,6 +1,6 @@
+import pytest 
 from gendiff.main import generate_diff
 from itertools import cycle, repeat
-import pytest 
 
 first_version_files = (
     './tests/files/file1_tree.json',
@@ -54,4 +54,3 @@ def test_generate_diff(file1, file2, correct_outputs, format_output):
         expected = f.read()
     eval_result = generate_diff(file1, file2, format_output)
     assert eval_result == expected.rstrip('\n')
-    
