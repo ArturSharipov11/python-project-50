@@ -1,5 +1,3 @@
-OLD = 'old'
-NEW = 'new'
 REMOVED = 'removed'
 ADDED = 'added'
 CHANGED = 'changed'

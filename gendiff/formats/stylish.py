@@ -1,41 +1,46 @@
-import json
-from collections import defaultdict
-from gendiff.constants import ADDED, REMOVED, NESTED, UNCHANGED, OLD, NEW
-from gendiff.formats.plain import map_stylish
+from gendiff.constants import ADDED, REMOVED, NESTED, CHANGED, UNCHANGED
+from itertools import chain
 
 
-def form_stylish(diff):
-    def convert_diff_tree_to_dict(diff):
-        result = defaultdict(dict)
+def stylish_view(diff, level=0, spaces_count=4):
+    lines_to_output = []
+    level_indent = ' ' * level * spaces_count
+    level += 1
+    for top_key, top_value in diff.items():
+        type_ = top_value.get('type')
+        value = top_value.get('value')
+        old_value = top_value.get('from')
+        new_value = top_value.get('to')
+        if type_ == NESTED:
+            lines_to_output.append(
+                f"{level_indent}    {top_key}: {stylish_view(value, level)}")
+        elif type_ == ADDED:
+            value = top_value.get('value')
+            lines_to_output.append(
+                f"{level_indent}  + {top_key}: {get_child(value, level)}")
+        elif type_ == REMOVED:
+            lines_to_output.append(
+                f"{level_indent}  - {top_key}: {get_child(value, level)}")
+        elif type_ == CHANGED:
+            lines_to_output.append(
+                f"{level_indent}  - {top_key}: {get_child(old_value, level)}")
+            lines_to_output.append(
+                f"{level_indent}  + {top_key}: {get_child(new_value, level)}")
+        elif type_ == UNCHANGED:
+            lines_to_output.append(
+                f"{level_indent}    {top_key}: {get_child(value, level)}")
+        output_data = list(chain('{', lines_to_output, [level_indent + '}']))
+    return '\n'.join(output_data)
 
-        def handle_unchanged(key, value):
-            result[key] = value[UNCHANGED]
 
-        def handle_changed(key, value):
-            result[f'- {key}'] = value[OLD]
-            result[f'+ {key}'] = value[NEW]
-
-        def handle_added(key, value):
-            result[f'+ {key}'] = value[ADDED]
-
-        def handle_removed(key, value):
-            result[f'- {key}'] = value[REMOVED]
-
-        def handle_nested(key, value):
-            result[key] = convert_diff_tree_to_dict(value)
-
-        for key, value in sorted(diff.items()):
-            if NESTED in value:
-                handle_nested(key, value[NESTED])
-            elif OLD in value:
-                handle_changed(key, value)
-            elif UNCHANGED in value:
-                handle_unchanged(key, value)
-            elif ADDED in value:
-                handle_added(key, value)
-            elif REMOVED in value:
-                handle_removed(key, value)
-        return result
-
-    result = json.dumps(convert_diff_tree_to_dict(diff), indent=4)
-    return map_stylish(result)
+def get_child(data, level=0, spaces_count=4):
+    if not isinstance(data, dict):
+        return data
+    result = []
+    level_indent = ' ' * level * spaces_count
+    level += 1
+    for key, value in data.items():
+        result.append(
+            f"{level_indent}    {key}: {get_child(value, level)}"
+        )
+    return '{\n' + '\n'.join(result) + '\n' + level_indent + '}'

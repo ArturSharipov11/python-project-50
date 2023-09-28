@@ -1,74 +1,38 @@
-from gendiff.constants import ADDED, NESTED, UNCHANGED, REMOVED, OLD, NEW
+from gendiff.constants import ADDED, NESTED, CHANGED, REMOVED
 
 
-def map_plain(value):
-    def handle_dict():
+def flatten(diff, parent=None):
+    lines_to_output = []
+
+    for top_key, top_value in diff.items():
+        path = f"{parent + '.' if parent else ''}{top_key}"
+
+        if top_value.get('type') == NESTED:
+            lines_to_output.append(flatten(top_value.get('value'), parent=path))  # noqa
+
+        elif top_value.get('type') == ADDED:
+            added_property = wrap_value(top_value.get('value'))
+            lines_to_output.append(
+                f"Property '{path}' was added with value: {added_property}")
+
+        elif top_value.get('type') == REMOVED:
+            lines_to_output.append(f"Property '{path}' was removed")
+
+        elif top_value.get('type') == CHANGED:
+            previous_property = wrap_value(top_value.get('from'))
+            new_property = wrap_value(top_value.get('to'))
+            lines_to_output.append(
+                f"Property '{path}' was updated."
+                f" From {previous_property} to {new_property}")
+
+    return '\n'.join(lines_to_output)
+
+
+def wrap_value(data):
+    if data in ['0']:
+        return 0
+    if isinstance(data, dict):
         return '[complex value]'
-
-    def handle_bool():
-        return str(value).lower()
-
-    def handle_str():
-        return f"'{value}'"
-
-    def handle_none():
-        return 'null'
-
-    def handle_default():
-        return value
-
-    handlers = {
-        dict: handle_dict,
-        bool: handle_bool,
-        str: handle_str,
-        type(None): handle_none,
-    }
-    return handlers.get(type(value), handle_default)()
-
-
-def map_stylish(string):
-    replace = {
-        '"': '',
-        ',': '',
-        '   +': ' +',
-        '   -': ' -',
-        '"true"': 'true',
-        '"false"': 'false',
-        '"null"': 'null',
-    }
-    for key, value in replace.items():
-        string = string.replace(key, value)
-    return string
-
-
-def form_plain(diff, path=''):
-    def handle_unchanged(key, value):
-        return ''
-
-    def handle_changed(key, value):
-        return f"Property '{key}' was updated. From {map_plain(value[OLD])} to {map_plain(value[NEW])}\n"
-
-    def handle_added(key, value):
-        return f"Property '{key}' was added with value: {map_plain(value[ADDED])}\n"
-
-    def handle_removed(key, value):
-        return f"Property '{key}' was removed\n"
-
-    def handle_nested(key, value):
-        return form_plain(value[NESTED], f'{key}')
-
-
-    result = ''
-    for key, value in sorted(diff.items()):
-        key = f'{path}.{key}' if path else key
-        if NESTED in value:
-            result += handle_nested(key, value)
-        elif OLD in value:
-            result += handle_changed(key, value)
-        elif UNCHANGED in value:
-            result += handle_unchanged(key, value)
-        elif ADDED in value:
-            result += handle_added(key, value)
-        elif REMOVED in value:
-            result += handle_removed(key, value)
-    return result
+    elif data not in ('false', 'true', 'null'):
+        return f"'{data}'"
+    return data

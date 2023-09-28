@@ -1,20 +1,36 @@
-from gendiff.constants import NESTED, UNCHANGED, CHANGED, OLD, NEW, REMOVED, ADDED
+from gendiff.constants import NESTED, UNCHANGED, CHANGED, REMOVED, ADDED
 
 
-def get_gen_diff(data1, data2):
-    result = {}
-    for key, value in data1.items():
-        if key in data2:
-            if isinstance(value, dict) and isinstance(data2[key], dict):
-                descendants = get_gen_diff(value, data2[key])
-                result[key] = {'type': NESTED, 'value': descendants}
-            elif value == data2[key]:
-                result[key] = {'type': UNCHANGED, 'value': value}
-            else:
-                result[key] = {'type': CHANGED, 'value': {OLD: value, NEW: data2[key]}}
-        else:
-            result[key] = {'type': REMOVED, 'value': value}
-    for key, value in data2.items():
-        if key not in data1:
-            result[key] = {'type': ADDED, 'value': value}
-    return result
+def get_comparison_results(file1, file2):
+    keys = file1.keys() | file2.keys()
+    diff = {}
+    for key in sorted(keys):
+        if key not in file2:
+            diff[key] = {'type': REMOVED,
+                         'value': convert_value(file1[key])}
+
+        elif key not in file1:
+            diff[key] = {'type': ADDED,
+                         'value': convert_value(file2[key])}
+
+        elif isinstance(file1[key], dict) and isinstance(file2[key], dict):
+            diff[key] = {'type': NESTED,
+                         'value': get_comparison_results(file1[key], file2[key])}  # noqa
+
+        elif file1[key] == file2[key]:
+            diff[key] = {'type': UNCHANGED,
+                         'value': convert_value(file1[key])}
+
+        elif file1[key] != file2[key]:
+            diff[key] = {'type': CHANGED,
+                         'from': convert_value(file1[key]),
+                         'to': convert_value(file2[key])}
+    return diff
+
+
+def convert_value(data):
+    if data is None:
+        return 'null'
+    if isinstance(data, bool):
+        return str(data).lower()
+    return data
