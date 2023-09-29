@@ -50,6 +50,8 @@ json_format_output = 'json'
     ]
 )
 
-def test_generate_diff(file1, file2, result, output_format):
-    diff = generate_diff(file1, file2, output_format)
-    assert diff == result
+
+
+def test_gendiff(file1, file2, correct_outputs, format_output):
+    assert generate_diff(file1, file2, format_output) == correct_outputs
+
