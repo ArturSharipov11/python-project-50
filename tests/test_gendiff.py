@@ -3,24 +3,24 @@ from gendiff.main import generate_diff
 from itertools import cycle, repeat
 
 first_version_files = (
-    './tests/files/file1_tree.json',
-    './tests/files/file1_tree.yaml',
+    './tests/fixtures/file1_tree.json',
+    './tests/fixtures/file1_tree.yaml',
 )
 
 second_version_files = (
-    './tests/files/file2_tree.json',
-    './tests/files/file2_tree.yaml',
+    './tests/fixtures/file2_tree.json',
+    './tests/fixtures/file2_tree.yaml',
 )
 
 pass_correct_outputs = (
-    './tests/files/tree_result.txt',
-    './tests/files/form_test_result.txt',
-    './tests/files/json_test.txt'
+    './tests/fixtures/tree_result.txt',
+    './tests/fixtures/form_test_result.txt',
+    './tests/fixtures/json_test.txt'
 )
 
-correct_output_stylish_format = './tests/files/tree_result.txt'
-correct_output_plain_format = './tests/files/form_test_result.txt'
-correct_output_json_format = './tests/files/json_test.txt'
+correct_output_stylish_format = './tests/fixtures/tree_result.txt'
+correct_output_plain_format = './tests/fixtures/form_test_result.txt'
+correct_output_json_format = './tests/fixtures/json_test.txt'
 
 
 stylish_format_output = 'stylish'
