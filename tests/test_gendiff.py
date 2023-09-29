@@ -1,5 +1,5 @@
 import pytest 
-from gendiff.main import generate_diff
+from gendiff import generate_diff
 from itertools import cycle, repeat
 
 first_version_files = (
