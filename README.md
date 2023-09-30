@@ -28,16 +28,19 @@ $$
 
 Сравнение двух плоских файлов: YAML
 
-https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542
+[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
 
 Рекурсивное сравнение
 
-https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542
+[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
+
 
 Плоский формат
 
- https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542
+[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
+
 
 Вывод в JSON
 
-https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542
+[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
+
