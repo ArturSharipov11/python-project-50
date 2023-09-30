@@ -1,7 +1,7 @@
 from gendiff.constants import NESTED, UNCHANGED, CHANGED, REMOVED, ADDED
 
 
-def get_comparison_results(file1, file2):
+def get_comparison_resul(file1, file2):
     keys = file1.keys() | file2.keys()
     diff = {}
     for key in sorted(keys):
@@ -15,7 +15,7 @@ def get_comparison_results(file1, file2):
 
         elif isinstance(file1[key], dict) and isinstance(file2[key], dict):
             diff[key] = {'type': NESTED,
-                         'value': get_comparison_results(file1[key], file2[key])}
+                         'value': get_comparison_resul(file1[key], file2[key])}
 
         elif file1[key] == file2[key]:
             diff[key] = {'type': UNCHANGED,
