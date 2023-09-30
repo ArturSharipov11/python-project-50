@@ -28,19 +28,18 @@ $$
 
 Сравнение двух плоских файлов: YAML
 
-[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
+[![asciicast](https://asciinema.org/a/TFytaehIkAJlZXvUMHRf0eIa9.svg)](https://asciinema.org/a/TFytaehIkAJlZXvUMHRf0eIa9)
 
 Рекурсивное сравнение
 
-[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
+[![asciicast](https://asciinema.org/a/j4eTrbPvfZGT5DpEcleg7EhkC.svg)](https://asciinema.org/a/j4eTrbPvfZGT5DpEcleg7EhkC)
 
 
 Плоский формат
 
-[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
+[![asciicast](https://asciinema.org/a/9N2f7SmBszOQPIE1ZiU1LAtGA.svg)](https://asciinema.org/a/9N2f7SmBszOQPIE1ZiU1LAtGA)
 
 
 Вывод в JSON
 
-[![asciicast](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542.svg)](https://asciinema.org/connect/04584070-aa8b-497c-acdb-36d08cc4a542)
-
+[![asciicast](https://asciinema.org/a/TZxLRDBiuRD3L23dxnAV9roDL.svg)](https://asciinema.org/a/TZxLRDBiuRD3L23dxnAV9roDL)
