@@ -29,6 +29,8 @@ def flatten(diff, parent=None):
 
 
 def wrap_value(data):
+    if type(data) == int or type(data) == float:
+        return data
     if data in ['0']:
         return 0
     if isinstance(data, dict):
