@@ -1,4 +1,3 @@
-from gendiff import main, cli
+from gendiff.main import generate_diff
 
-generate_diff = main.generate_diff
-parse_arguments = cli
+__all__ = ('generate_diff',)
