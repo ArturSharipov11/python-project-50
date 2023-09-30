@@ -29,7 +29,7 @@ def flatten(diff, parent=None):
 
 
 def wrap_value(data):
-    if type(data) == int or type(data) == float:
+    if isinstance(data, (int, float)):
         return data
     if data in ['0']:
         return 0

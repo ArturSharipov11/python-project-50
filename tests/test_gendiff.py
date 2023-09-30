@@ -54,4 +54,3 @@ import pytest
 ])
 def test_gendiff(file1, file2, correct_outputs, format_output):
     assert generate_diff(file1, file2, format_output) == correct_outputs
-
