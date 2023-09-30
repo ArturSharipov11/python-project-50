@@ -8,7 +8,7 @@ def flatten(diff, parent=None):
         path = f"{parent + '.' if parent else ''}{top_key}"
 
         if top_value.get('type') == NESTED:
-            lines_to_output.append(flatten(top_value.get('value'), parent=path))  # noqa
+            lines_to_output.append(flatten(top_value.get('value'), parent=path))
 
         elif top_value.get('type') == ADDED:
             added_property = wrap_value(top_value.get('value'))
