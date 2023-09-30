@@ -24,7 +24,7 @@ $$
 
 Сравнение двух плоских файлов: JSON
 
-https://asciinema.org/a/tkGQB8BbSVe8OyRmYjyTlnYyZ
+[![asciicast](https://asciinema.org/a/tkGQB8BbSVe8OyRmYjyTlnYyZ.svg)](https://asciinema.org/a/tkGQB8BbSVe8OyRmYjyTlnYyZ)
 
 Сравнение двух плоских файлов: YAML
 
