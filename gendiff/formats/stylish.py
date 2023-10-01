@@ -4,7 +4,7 @@ from gendiff.constants import ADDED, REMOVED, NESTED, CHANGED, UNCHANGED
 from itertools import chain
 
 
-def stylish_view(diff, level=0, spaces_count=4):
+def stylish_view(diff, level=0, spaces_count=4):  # noqa: C901
     lines_to_output = []
     level_indent = ' ' * level * spaces_count
     level += 1

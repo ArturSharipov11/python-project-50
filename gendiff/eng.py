@@ -1,7 +1,7 @@
 from gendiff.constants import NESTED, UNCHANGED, CHANGED, REMOVED, ADDED
 
 
-def get_comparison_resul(file1, file2):
+def get_comparison_resul(file1, file2):  # noqa: C901
     keys = file1.keys() | file2.keys()
     diff = {}
     for key in sorted(keys):
