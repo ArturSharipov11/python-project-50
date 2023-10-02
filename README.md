@@ -5,7 +5,7 @@
 
 <a href="https://codeclimate.com/github/ArturSharipov11/python-project-50/test_coverage"><img src="https://api.codeclimate.com/v1/badges/58ed064c7d939f860240/test_coverage" /></a>
 
-
+[![Github Actions Status](https://github.com/ArturSharipov11/python-project-50/workflows/main/badge.svg)](https://github.com/ArturSharipov11/python-project-50/actions)
 
 
 Вычислитель отличий
